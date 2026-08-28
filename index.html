@@ -270,15 +270,15 @@
 
 <div id="modal-folder" class="overlay hidden">
   <div class="sheet">
-    <div class="sheet-title">📁 Escolher pasta raiz</div>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
-      O app vai buscar PDFs somente dentro da pasta selecionada (incluindo subpastas).
-    </p>
-    <input id="folder-search" type="text" class="text-input" placeholder="🔍  Filtrar pastas…" oninput="filterFolders()" autocorrect="off">
+    <div class="sheet-title">📁 Escolher pasta</div>
+    <div id="folder-breadcrumb" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:12px;font-size:13px;"></div>
     <div id="folder-list">
-      <div class="loading"><div class="spinner"></div><span>Carregando pastas…</span></div>
+      <div class="loading"><div class="spinner"></div><span>Carregando…</span></div>
     </div>
-    <button class="btn-secondary" style="margin-top:12px" onclick="closeModal('modal-folder')">Cancelar</button>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button id="btn-select-folder" class="btn-primary" onclick="confirmFolder()">✓ Usar esta pasta</button>
+      <button class="btn-secondary" style="margin-top:0" onclick="closeModal('modal-folder')">Cancelar</button>
+    </div>
   </div>
 </div>
 
