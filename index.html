@@ -33,21 +33,12 @@
       overflow: hidden;
     }
 
-    /* ── SCREENS ── */
-    .screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-    }
+    .screen { position: fixed; inset: 0; display: flex; flex-direction: column; }
     .hidden { display: none !important; }
 
-    /* ── AUTH ── */
     #screen-auth {
       background: linear-gradient(150deg, #0f0f1a 0%, #1a1a3e 60%, #0f3060 100%);
-      align-items: center;
-      justify-content: center;
-      gap: 28px;
+      align-items: center; justify-content: center; gap: 28px;
     }
     .auth-icon  { font-size: 80px; }
     .auth-title { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; }
@@ -57,111 +48,73 @@
       background: #fff; color: #111; border: none;
       border-radius: 14px; padding: 15px 28px;
       font-size: 16px; font-weight: 600; cursor: pointer;
-      box-shadow: 0 2px 16px rgba(0,0,0,.3);
-      margin-top: 8px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.3); margin-top: 8px;
     }
     .btn-google:active { opacity: .85; }
     .link-btn {
       background: none; border: none;
-      color: rgba(255,255,255,.4); font-size: 13px; cursor: pointer;
-      margin-top: -12px;
+      color: rgba(255,255,255,.4); font-size: 13px; cursor: pointer; margin-top: -12px;
     }
 
-    /* ── CONFIG ── */
-    #screen-config {
-      align-items: center; justify-content: center; padding: 24px;
-    }
-    .config-card {
-      background: var(--surface); border-radius: 20px;
-      padding: 28px; width: 100%; max-width: 420px;
-    }
+    #screen-config { align-items: center; justify-content: center; padding: 24px; }
+    .config-card { background: var(--surface); border-radius: 20px; padding: 28px; width: 100%; max-width: 420px; }
     .config-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
     .config-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
     .config-card a  { color: var(--primary); }
-    .field-label { font-size: 12px; font-weight: 700; color: var(--text-muted);
-                   text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+    .field-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
 
-    /* ── HEADER ── */
     .header {
-      height: var(--header-h); background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; padding: 0 16px; gap: 8px;
-      flex-shrink: 0;
+      height: var(--header-h); background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 16px; gap: 8px; flex-shrink: 0;
     }
     .header-title { font-size: 20px; font-weight: 700; flex: 1; }
-    .icon-btn {
-      background: none; border: none; padding: 8px; border-radius: 10px;
-      font-size: 20px; cursor: pointer; line-height: 1;
-    }
+    .icon-btn { background: none; border: none; padding: 8px; border-radius: 10px; font-size: 20px; cursor: pointer; line-height: 1; }
     .icon-btn:active { background: var(--bg); }
 
-    /* ── BOTTOM NAV ── */
     #bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: calc(var(--nav-h) + var(--safe-bottom));
       background: var(--surface); border-top: 1px solid var(--border);
-      display: flex; z-index: 100;
-      padding-bottom: var(--safe-bottom);
+      display: flex; z-index: 100; padding-bottom: var(--safe-bottom);
     }
     .nav-btn {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      background: none; border: none; cursor: pointer;
-      color: var(--text-muted); font-size: 11px; font-weight: 600;
-      transition: color .15s;
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+      background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 11px; font-weight: 600; transition: color .15s;
     }
     .nav-btn .ni { font-size: 26px; }
     .nav-btn.active { color: var(--primary); }
 
-    /* ── LIBRARY ── */
     #screen-library { padding-bottom: var(--nav-h); }
     .search-wrap {
-      padding: 10px 14px 0;
-      display: flex; gap: 8px; align-items: center;
+      padding: 10px 14px; display: flex; gap: 8px; align-items: center;
       background: var(--surface); border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
     }
     .search-input {
       flex: 1; border: 1px solid var(--border); border-radius: 10px;
-      padding: 9px 14px; font-size: 15px; background: var(--bg);
-      outline: none; color: var(--text);
+      padding: 9px 14px; font-size: 15px; background: var(--bg); outline: none; color: var(--text);
     }
     .search-input:focus { border-color: var(--primary); }
     .scroll-area { flex: 1; overflow-y: auto; padding: 14px; }
 
-    .files-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
+    .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
     .file-card {
-      background: var(--surface); border-radius: 16px;
-      border: 1.5px solid var(--border);
-      padding: 16px 12px 12px;
-      cursor: pointer; position: relative;
+      background: var(--surface); border-radius: 16px; border: 1.5px solid var(--border);
+      padding: 16px 12px 12px; cursor: pointer; position: relative;
       display: flex; flex-direction: column; align-items: center; gap: 8px;
-      text-align: center; transition: transform .12s, box-shadow .12s;
-      -webkit-tap-highlight-color: transparent;
+      text-align: center; transition: transform .12s; -webkit-tap-highlight-color: transparent;
     }
-    .file-card:active { transform: scale(.96); box-shadow: none; }
+    .file-card:active { transform: scale(.96); }
     .file-card .fi { font-size: 36px; }
     .file-card .fn {
       font-size: 12px; font-weight: 500; line-height: 1.35; color: var(--text);
       display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
     }
-    .card-add {
-      position: absolute; top: 6px; right: 8px;
-      background: none; border: none; font-size: 22px; cursor: pointer;
-      color: var(--text-muted); line-height: 1;
-    }
+    .card-add { position: absolute; top: 6px; right: 8px; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); line-height: 1; }
 
-    /* ── PLAYLISTS ── */
     #screen-playlists { padding-bottom: var(--nav-h); }
     .pl-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
     .pl-card { background: var(--surface); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; }
-    .pl-header {
-      display: flex; align-items: center; padding: 14px 16px; gap: 10px; cursor: pointer;
-    }
+    .pl-header { display: flex; align-items: center; padding: 14px 16px; gap: 10px; cursor: pointer; }
     .pl-header-icon { font-size: 26px; }
     .pl-name { flex: 1; font-weight: 600; font-size: 16px; }
     .pl-count { font-size: 13px; color: var(--text-muted); }
@@ -169,9 +122,8 @@
     .pl-files { border-top: 1px solid var(--border); display: none; }
     .pl-files.open { display: block; }
     .pl-file-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px; border-bottom: 1px solid var(--border);
-      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+      border-bottom: 1px solid var(--border); cursor: pointer; -webkit-tap-highlight-color: transparent;
     }
     .pl-file-row:last-child { border-bottom: none; }
     .pl-file-row:active { background: var(--bg); }
@@ -179,107 +131,55 @@
     .pl-file-del { background: none; border: none; font-size: 16px; cursor: pointer; opacity: .4; padding: 4px; }
     .btn-new-pl {
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: var(--primary); color: white; border: none;
-      border-radius: 14px; padding: 15px; font-size: 16px; font-weight: 600;
-      cursor: pointer; width: 100%;
+      background: var(--primary); color: white; border: none; border-radius: 14px;
+      padding: 15px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%;
     }
     .btn-new-pl:active { background: var(--primary-dark); }
 
-    /* ── READER ── */
     #screen-reader { background: #1a1a1a; }
-    .reader-header {
-      height: var(--header-h); background: rgba(0,0,0,.75);
-      display: flex; align-items: center; padding: 0 12px; gap: 8px;
-      flex-shrink: 0;
-    }
-    .reader-title {
-      flex: 1; color: #fff; font-size: 15px; font-weight: 600;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .reader-add-btn {
-      background: rgba(255,255,255,.12); border: none; border-radius: 10px;
-      color: #fff; font-size: 13px; font-weight: 600; padding: 7px 12px; cursor: pointer;
-    }
+    .reader-header { height: var(--header-h); background: rgba(0,0,0,.75); display: flex; align-items: center; padding: 0 12px; gap: 8px; flex-shrink: 0; }
+    .reader-title { flex: 1; color: #fff; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .reader-add-btn { background: rgba(255,255,255,.12); border: none; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 600; padding: 7px 12px; cursor: pointer; }
     .reader-content { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; }
     #pdf-canvas { display: block; max-width: 100%; }
-    .reader-footer {
-      height: 56px; background: rgba(0,0,0,.75);
-      display: flex; align-items: center; justify-content: center;
-      gap: 20px; flex-shrink: 0;
-    }
-    .page-btn {
-      background: none; border: none; color: #fff; font-size: 32px; cursor: pointer;
-      padding: 6px 18px; opacity: .85; line-height: 1;
-    }
+    .reader-footer { height: 56px; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; gap: 20px; flex-shrink: 0; }
+    .page-btn { background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; padding: 6px 18px; opacity: .85; line-height: 1; }
     .page-btn:disabled { opacity: .25; }
     .page-info { color: rgba(255,255,255,.65); font-size: 14px; min-width: 72px; text-align: center; }
 
-    /* ── INPUTS & BUTTONS ── */
-    .text-input {
-      width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
-      padding: 13px 14px; font-size: 16px; background: var(--bg);
-      color: var(--text); outline: none; margin-bottom: 12px;
-    }
+    .text-input { width: 100%; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 14px; font-size: 16px; background: var(--bg); color: var(--text); outline: none; margin-bottom: 12px; }
     .text-input:focus { border-color: var(--primary); }
-    .btn-primary {
-      background: var(--primary); color: #fff; border: none;
-      border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 600;
-      cursor: pointer; width: 100%;
-    }
+    .btn-primary { background: var(--primary); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
     .btn-primary:active { background: var(--primary-dark); }
-    .btn-secondary {
-      background: var(--bg); color: var(--text); border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 13px; font-size: 16px; font-weight: 500;
-      cursor: pointer; width: 100%; margin-top: 8px;
-    }
+    .btn-secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 12px; padding: 13px; font-size: 16px; font-weight: 500; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-secondary:active { background: var(--border); }
 
-    /* ── MODALS ── */
-    .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.5);
-      display: flex; align-items: flex-end; z-index: 200;
-    }
-    .sheet {
-      background: var(--surface); border-radius: 24px 24px 0 0;
-      padding: 24px; width: 100%; max-height: 75vh; overflow-y: auto;
-      padding-bottom: calc(24px + var(--safe-bottom));
-    }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: flex-end; z-index: 200; }
+    .sheet { background: var(--surface); border-radius: 24px 24px 0 0; padding: 24px; width: 100%; max-height: 75vh; overflow-y: auto; padding-bottom: calc(24px + var(--safe-bottom)); }
     .sheet-title { font-size: 20px; font-weight: 700; margin-bottom: 18px; }
-    .pl-option {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer;
-    }
+    .pl-option { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
     .pl-option:last-of-type { border-bottom: none; }
     .pl-option:active { opacity: .7; }
     .pl-option-name { font-size: 16px; }
     .pl-option.done { opacity: .4; pointer-events: none; }
 
-    /* ── STATES ── */
-    .loading, .empty {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px; padding: 48px 24px; text-align: center; color: var(--text-muted);
-    }
+    .loading, .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 48px 24px; text-align: center; color: var(--text-muted); }
     .empty .ei { font-size: 52px; }
-    .spinner {
-      width: 30px; height: 30px; border: 3px solid var(--border);
-      border-top-color: var(--primary); border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
+    .spinner { width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── TOAST ── */
-    #toast {
-      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-      background: #222; color: #fff; padding: 10px 20px; border-radius: 20px;
-      font-size: 14px; z-index: 999; opacity: 0; transition: opacity .2s;
-      white-space: nowrap; pointer-events: none;
-    }
+    .folder-item { display: flex; align-items: center; gap: 10px; padding: 13px 4px; border-bottom: 1px solid var(--border); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .folder-item:last-child { border-bottom: none; }
+    .folder-item:active { opacity: .7; }
+    .folder-item-name { flex: 1; font-size: 15px; }
+    .folder-item.selected { color: var(--primary); font-weight: 600; }
+
+    #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 999; opacity: 0; transition: opacity .2s; white-space: nowrap; pointer-events: none; }
     #toast.show { opacity: 1; }
   </style>
 </head>
 <body>
 
-<!-- ════════════════════ AUTH SCREEN ════════════════════ -->
 <div id="screen-auth" class="screen">
   <div class="auth-icon">🎸</div>
   <div style="text-align:center">
@@ -298,7 +198,6 @@
   <button class="link-btn" onclick="showScreen('config')">⚙ Configurar Client ID</button>
 </div>
 
-<!-- ════════════════════ CONFIG SCREEN ════════════════════ -->
 <div id="screen-config" class="screen hidden">
   <div class="config-card">
     <h2>🔑 Configuração</h2>
@@ -307,7 +206,6 @@
       <a href="https://console.cloud.google.com/" target="_blank">Acesse o Google Cloud Console</a>,
       crie um projeto, ative a <strong>Google Drive API</strong>, crie uma credencial OAuth
       do tipo "Aplicativo da Web" e adicione a URL deste app como origem autorizada.
-      É gratuito.
     </p>
     <div class="field-label">Client ID</div>
     <input id="client-id-input" type="text" class="text-input"
@@ -318,23 +216,26 @@
   </div>
 </div>
 
-<!-- ════════════════════ LIBRARY SCREEN ════════════════════ -->
 <div id="screen-library" class="screen hidden">
   <div class="header">
     <div class="header-title">🎸 Biblioteca</div>
+    <button class="icon-btn" onclick="openFolderPicker()" title="Escolher pasta">📁</button>
     <button class="icon-btn" onclick="loadFiles()" title="Atualizar">↻</button>
     <button class="icon-btn" onclick="signOut()" title="Sair">👤</button>
   </div>
+  <div id="folder-banner" class="hidden" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:#FFF3EE;border-bottom:1px solid #FFD5C2;font-size:13px;color:#c0440a;">
+    <span>📁</span>
+    <span id="folder-banner-name" style="flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+    <button onclick="clearFolder()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#c0440a;opacity:.6;">✕</button>
+  </div>
   <div class="search-wrap">
-    <input id="search-input" type="text" class="search-input"
-      placeholder="🔍  Buscar cifras..." oninput="filterFiles()">
+    <input id="search-input" type="text" class="search-input" placeholder="🔍  Buscar cifras..." oninput="filterFiles()">
   </div>
   <div class="scroll-area" id="library-content">
     <div class="loading"><div class="spinner"></div><span>Carregando cifras…</span></div>
   </div>
 </div>
 
-<!-- ════════════════════ PLAYLISTS SCREEN ════════════════════ -->
 <div id="screen-playlists" class="screen hidden">
   <div class="header">
     <div class="header-title">📋 Playlists</div>
@@ -342,7 +243,6 @@
   <div class="pl-list" id="pl-list"></div>
 </div>
 
-<!-- ════════════════════ READER SCREEN ════════════════════ -->
 <div id="screen-reader" class="screen hidden">
   <div class="reader-header">
     <button class="icon-btn" style="color:#fff" onclick="closeReader()">←</button>
@@ -350,10 +250,7 @@
     <button class="reader-add-btn" onclick="openAddModal()">＋ Playlist</button>
   </div>
   <div class="reader-content" id="reader-content">
-    <div class="loading">
-      <div class="spinner"></div>
-      <span style="color:rgba(255,255,255,.6)">Carregando PDF…</span>
-    </div>
+    <div class="loading"><div class="spinner"></div><span style="color:rgba(255,255,255,.6)">Carregando PDF…</span></div>
   </div>
   <div class="reader-footer">
     <button class="page-btn" id="btn-prev" onclick="changePage(-1)">‹</button>
@@ -362,7 +259,6 @@
   </div>
 </div>
 
-<!-- ════════════════════ BOTTOM NAV ════════════════════ -->
 <nav id="bottom-nav" class="hidden">
   <button class="nav-btn active" id="nav-library" onclick="showScreen('library')">
     <span class="ni">📚</span>Biblioteca
@@ -372,7 +268,20 @@
   </button>
 </nav>
 
-<!-- ════════════════════ MODAL: Add to Playlist ════════════════════ -->
+<div id="modal-folder" class="overlay hidden">
+  <div class="sheet">
+    <div class="sheet-title">📁 Escolher pasta raiz</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">
+      O app vai buscar PDFs somente dentro da pasta selecionada (incluindo subpastas).
+    </p>
+    <input id="folder-search" type="text" class="text-input" placeholder="🔍  Filtrar pastas…" oninput="filterFolders()" autocorrect="off">
+    <div id="folder-list">
+      <div class="loading"><div class="spinner"></div><span>Carregando pastas…</span></div>
+    </div>
+    <button class="btn-secondary" style="margin-top:12px" onclick="closeModal('modal-folder')">Cancelar</button>
+  </div>
+</div>
+
 <div id="modal-add" class="overlay hidden">
   <div class="sheet">
     <div class="sheet-title">Adicionar à Playlist</div>
@@ -382,56 +291,44 @@
   </div>
 </div>
 
-<!-- ════════════════════ MODAL: New Playlist ════════════════════ -->
 <div id="modal-new-pl" class="overlay hidden">
   <div class="sheet">
     <div class="sheet-title">Nova Playlist</div>
-    <input id="new-pl-name" type="text" class="text-input"
-      placeholder="Nome da playlist…" autocorrect="off" autocapitalize="sentences">
+    <input id="new-pl-name" type="text" class="text-input" placeholder="Nome da playlist…" autocorrect="off" autocapitalize="sentences">
     <button class="btn-primary" onclick="createPlaylist()">Criar</button>
     <button class="btn-secondary" onclick="closeModal('modal-new-pl')">Cancelar</button>
   </div>
 </div>
 
-<!-- ════════════════════ TOAST ════════════════════ -->
 <div id="toast"></div>
 
-<!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" async></script>
-<!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <script>
 'use strict';
 
-// ─────────────────────────────────────────────
-// CONSTANTS & STATE
-// ─────────────────────────────────────────────
-const SCOPES   = 'https://www.googleapis.com/auth/drive.readonly';
-const DRIVE    = 'https://www.googleapis.com/drive/v3';
+const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+const DRIVE  = 'https://www.googleapis.com/drive/v3';
 
-let clientId     = localStorage.getItem('cifras_cid') || '';
-let accessToken  = null;
-let tokenClient  = null;
-let allFiles     = [];       // [{id, name}]
-let pdfDoc       = null;
-let currentPage  = 1;
-let currentId    = null;
-let currentName  = '';
-let prevScreen   = 'library';
-// For "add to playlist" flow
-let pendingId    = null;
-let pendingName  = '';
-// Whether new-playlist modal should also add the pending file
+let clientId       = localStorage.getItem('cifras_cid') || '';
+let accessToken    = null;
+let tokenClient    = null;
+let allFiles       = [];
+let pdfDoc         = null;
+let currentPage    = 1;
+let currentId      = null;
+let currentName    = '';
+let prevScreen     = 'library';
+let pendingId      = null;
+let pendingName    = '';
 let addAfterCreate = false;
+let allFolders     = [];
+let selectedFolder = JSON.parse(localStorage.getItem('cifras_folder') || 'null');
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-// ─────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────
-// Register Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
@@ -439,28 +336,17 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('load', () => {
   const tok = sessionStorage.getItem('cifras_tok');
   const exp = sessionStorage.getItem('cifras_exp');
-  if (tok && exp && Date.now() < +exp) {
-    accessToken = tok;
-    enterApp();
-  } else {
-    showScreen('auth');
-  }
+  if (tok && exp && Date.now() < +exp) { accessToken = tok; enterApp(); }
+  else showScreen('auth');
 });
 
-// ─────────────────────────────────────────────
-// AUTH
-// ─────────────────────────────────────────────
 function startSignIn() {
   if (!clientId) { showScreen('config'); return; }
-  if (typeof google === 'undefined') {
-    toast('Script do Google ainda carregando, tente novamente.');
-    return;
-  }
+  if (typeof google === 'undefined') { toast('Script do Google ainda carregando.'); return; }
   tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: clientId,
-    scope: SCOPES,
+    client_id: clientId, scope: SCOPES,
     callback(resp) {
-      if (resp.error) { console.error(resp); toast('Erro: ' + resp.error); return; }
+      if (resp.error) { toast('Erro: ' + resp.error); return; }
       accessToken = resp.access_token;
       sessionStorage.setItem('cifras_tok', accessToken);
       sessionStorage.setItem('cifras_exp', Date.now() + resp.expires_in * 1000);
@@ -471,11 +357,8 @@ function startSignIn() {
 }
 
 function signOut() {
-  if (accessToken && typeof google !== 'undefined')
-    google.accounts.oauth2.revoke(accessToken);
-  accessToken = null;
-  sessionStorage.clear();
-  allFiles = [];
+  if (accessToken && typeof google !== 'undefined') google.accounts.oauth2.revoke(accessToken);
+  accessToken = null; sessionStorage.clear(); allFiles = [];
   document.getElementById('bottom-nav').classList.add('hidden');
   showScreen('auth');
 }
@@ -483,23 +366,31 @@ function signOut() {
 function saveConfig() {
   const v = document.getElementById('client-id-input').value.trim();
   if (!v) { toast('Cole o Client ID antes de salvar.'); return; }
-  clientId = v;
-  localStorage.setItem('cifras_cid', v);
-  showScreen('auth');
+  clientId = v; localStorage.setItem('cifras_cid', v); showScreen('auth');
 }
 
-// ─────────────────────────────────────────────
-// APP ENTRY
-// ─────────────────────────────────────────────
 function enterApp() {
   document.getElementById('bottom-nav').classList.remove('hidden');
-  showScreen('library');
-  loadFiles();
+  showScreen('library'); loadFiles();
 }
 
-// ─────────────────────────────────────────────
+// FOLDER STATE
+function updateFolderBanner() {
+  const banner = document.getElementById('folder-banner');
+  if (selectedFolder) {
+    document.getElementById('folder-banner-name').textContent = selectedFolder.name;
+    banner.style.display = 'flex'; banner.classList.remove('hidden');
+  } else {
+    banner.style.display = 'none'; banner.classList.add('hidden');
+  }
+}
+
+function clearFolder() {
+  selectedFolder = null; localStorage.removeItem('cifras_folder');
+  updateFolderBanner(); loadFiles();
+}
+
 // DRIVE API
-// ─────────────────────────────────────────────
 async function api(url) {
   const r = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
   if (!r.ok) throw new Error(`Drive ${r.status}`);
@@ -507,18 +398,20 @@ async function api(url) {
 }
 
 async function loadFiles() {
+  updateFolderBanner();
   setLibraryContent(`<div class="loading"><div class="spinner"></div><span>Carregando cifras…</span></div>`);
   try {
+    const folderIds = selectedFolder ? await getAllFolderIds(selectedFolder.id) : null;
     let files = [], pageToken = '';
     do {
-      const q  = encodeURIComponent("mimeType='application/pdf' and trashed=false");
-      let  url = `${DRIVE}/files?q=${q}&fields=nextPageToken,files(id,name)&orderBy=name&pageSize=200`;
+      let qStr = folderIds
+        ? `mimeType='application/pdf' and trashed=false and (${folderIds.map(id => `'${id}' in parents`).join(' or ')})`
+        : "mimeType='application/pdf' and trashed=false";
+      let url = `${DRIVE}/files?q=${encodeURIComponent(qStr)}&fields=nextPageToken,files(id,name)&orderBy=name&pageSize=200`;
       if (pageToken) url += `&pageToken=${pageToken}`;
-      const d  = await api(url);
-      files      = files.concat(d.files || []);
-      pageToken  = d.nextPageToken || '';
+      const d = await api(url);
+      files = files.concat(d.files || []); pageToken = d.nextPageToken || '';
     } while (pageToken);
-
     allFiles = files;
     document.getElementById('search-input').value = '';
     renderLibrary(files);
@@ -528,35 +421,87 @@ async function loadFiles() {
   }
 }
 
-// ─────────────────────────────────────────────
+async function getAllFolderIds(rootId) {
+  const ids = [rootId], queue = [rootId];
+  while (queue.length) {
+    const fid = queue.shift();
+    try {
+      const q = encodeURIComponent(`mimeType='application/vnd.google-apps.folder' and '${fid}' in parents and trashed=false`);
+      const d = await api(`${DRIVE}/files?q=${q}&fields=files(id)&pageSize=100`);
+      for (const sub of (d.files || [])) { ids.push(sub.id); queue.push(sub.id); }
+    } catch {}
+  }
+  return ids;
+}
+
+// FOLDER PICKER
+async function openFolderPicker() {
+  document.getElementById('folder-search').value = '';
+  document.getElementById('folder-list').innerHTML = `<div class="loading"><div class="spinner"></div><span>Carregando pastas…</span></div>`;
+  openModal('modal-folder');
+  try {
+    let folders = [], pageToken = '';
+    do {
+      const q = encodeURIComponent("mimeType='application/vnd.google-apps.folder' and trashed=false");
+      let url = `${DRIVE}/files?q=${q}&fields=nextPageToken,files(id,name)&orderBy=name&pageSize=200`;
+      if (pageToken) url += `&pageToken=${pageToken}`;
+      const d = await api(url);
+      folders = folders.concat(d.files || []); pageToken = d.nextPageToken || '';
+    } while (pageToken);
+    allFolders = folders; renderFolderList(folders);
+  } catch (e) {
+    document.getElementById('folder-list').innerHTML = `<div class="empty"><div class="ei">⚠️</div><p>Não foi possível carregar as pastas.</p></div>`;
+  }
+}
+
+function renderFolderList(folders) {
+  const list = document.getElementById('folder-list');
+  list.innerHTML = '';
+  const allRow = document.createElement('div');
+  allRow.className = 'folder-item' + (!selectedFolder ? ' selected' : '');
+  allRow.innerHTML = `<span>☁️</span><span class="folder-item-name">Todo o Drive</span>${!selectedFolder ? '<span>✓</span>' : ''}`;
+  allRow.addEventListener('click', () => { clearFolder(); closeModal('modal-folder'); });
+  list.appendChild(allRow);
+  folders.forEach(f => {
+    const isSel = selectedFolder?.id === f.id;
+    const row = document.createElement('div');
+    row.className = 'folder-item' + (isSel ? ' selected' : '');
+    row.innerHTML = `<span>📁</span><span class="folder-item-name">${esc(f.name)}</span>${isSel ? '<span>✓</span>' : ''}`;
+    row.addEventListener('click', () => selectFolder(f));
+    list.appendChild(row);
+  });
+}
+
+function filterFolders() {
+  const q = document.getElementById('folder-search').value.toLowerCase().trim();
+  renderFolderList(q ? allFolders.filter(f => f.name.toLowerCase().includes(q)) : allFolders);
+}
+
+function selectFolder(folder) {
+  selectedFolder = { id: folder.id, name: folder.name };
+  localStorage.setItem('cifras_folder', JSON.stringify(selectedFolder));
+  closeModal('modal-folder'); loadFiles();
+}
+
 // LIBRARY
-// ─────────────────────────────────────────────
 function renderLibrary(files) {
   if (!files.length) {
-    setLibraryContent(`<div class="empty"><div class="ei">📄</div><p>Nenhum PDF encontrado no Drive.</p></div>`);
+    setLibraryContent(`<div class="empty"><div class="ei">📄</div><p>Nenhum PDF encontrado.</p></div>`);
     return;
   }
   const grid = document.createElement('div');
   grid.className = 'files-grid';
   files.forEach(f => {
     const label = f.name.replace(/\.pdf$/i, '');
-    const card  = document.createElement('div');
+    const card = document.createElement('div');
     card.className = 'file-card';
-    card.innerHTML = `
-      <div class="fi">🎵</div>
-      <div class="fn">${esc(label)}</div>
-      <button class="card-add" title="Adicionar à playlist">＋</button>
-    `;
+    card.innerHTML = `<div class="fi">🎵</div><div class="fn">${esc(label)}</div><button class="card-add" title="Adicionar à playlist">＋</button>`;
     card.addEventListener('click', () => openReader(f.id, f.name));
-    card.querySelector('.card-add').addEventListener('click', e => {
-      e.stopPropagation();
-      openAddForFile(f.id, f.name);
-    });
+    card.querySelector('.card-add').addEventListener('click', e => { e.stopPropagation(); openAddForFile(f.id, f.name); });
     grid.appendChild(card);
   });
   const wrap = document.getElementById('library-content');
-  wrap.innerHTML = '';
-  wrap.appendChild(grid);
+  wrap.innerHTML = ''; wrap.appendChild(grid);
 }
 
 function filterFiles() {
@@ -564,64 +509,44 @@ function filterFiles() {
   renderLibrary(q ? allFiles.filter(f => f.name.toLowerCase().includes(q)) : allFiles);
 }
 
-function setLibraryContent(html) {
-  document.getElementById('library-content').innerHTML = html;
-}
+function setLibraryContent(html) { document.getElementById('library-content').innerHTML = html; }
 
-// ─────────────────────────────────────────────
 // PDF READER
-// ─────────────────────────────────────────────
 async function openReader(id, name) {
-  currentId   = id;
-  currentName = name;
-  prevScreen  = currentVisibleScreen();
-
-  const label = name.replace(/\.pdf$/i, '');
-  document.getElementById('reader-title').textContent = label;
-  document.getElementById('reader-content').innerHTML =
-    `<div class="loading"><div class="spinner"></div><span style="color:rgba(255,255,255,.6)">Carregando PDF…</span></div>`;
+  currentId = id; currentName = name; prevScreen = currentVisibleScreen();
+  document.getElementById('reader-title').textContent = name.replace(/\.pdf$/i, '');
+  document.getElementById('reader-content').innerHTML = `<div class="loading"><div class="spinner"></div><span style="color:rgba(255,255,255,.6)">Carregando PDF…</span></div>`;
   showScreen('reader');
-
   try {
-    const res = await fetch(`${DRIVE}/files/${id}?alt=media`, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
+    const res = await fetch(`${DRIVE}/files/${id}?alt=media`, { headers: { Authorization: `Bearer ${accessToken}` } });
     if (!res.ok) throw new Error(res.status);
     const buf = await res.arrayBuffer();
-
     pdfDoc = await pdfjsLib.getDocument({ data: buf }).promise;
     currentPage = 1;
     document.getElementById('reader-content').innerHTML = `<canvas id="pdf-canvas"></canvas>`;
     await renderPage(1);
   } catch (e) {
-    document.getElementById('reader-content').innerHTML =
-      `<div class="empty"><div class="ei">⚠️</div><p style="color:#fff">Erro ao carregar o PDF.</p></div>`;
-    console.error(e);
+    document.getElementById('reader-content').innerHTML = `<div class="empty"><div class="ei">⚠️</div><p style="color:#fff">Erro ao carregar o PDF.</p></div>`;
   }
 }
 
 async function renderPage(num) {
   if (!pdfDoc) return;
-  const page      = await pdfDoc.getPage(num);
-  const canvas    = document.getElementById('pdf-canvas');
+  const page = await pdfDoc.getPage(num);
+  const canvas = document.getElementById('pdf-canvas');
   if (!canvas) return;
-  const ctx       = canvas.getContext('2d');
-  const dpr       = window.devicePixelRatio || 1;
-  const base      = page.getViewport({ scale: 1 });
-  const scale     = (window.innerWidth / base.width) * dpr;
-  const vp        = page.getViewport({ scale });
-
-  canvas.width        = vp.width;
-  canvas.height       = vp.height;
-  canvas.style.width  = window.innerWidth + 'px';
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const base = page.getViewport({ scale: 1 });
+  const vp = page.getViewport({ scale: (window.innerWidth / base.width) * dpr });
+  canvas.width = vp.width; canvas.height = vp.height;
+  canvas.style.width = window.innerWidth + 'px';
   canvas.style.height = (vp.height / dpr) + 'px';
-
   await page.render({ canvasContext: ctx, viewport: vp }).promise;
-
   currentPage = num;
-  document.getElementById('page-info').textContent  = `${num} / ${pdfDoc.numPages}`;
-  document.getElementById('btn-prev').disabled       = num <= 1;
-  document.getElementById('btn-next').disabled       = num >= pdfDoc.numPages;
+  document.getElementById('page-info').textContent = `${num} / ${pdfDoc.numPages}`;
+  document.getElementById('btn-prev').disabled = num <= 1;
+  document.getElementById('btn-next').disabled = num >= pdfDoc.numPages;
   document.getElementById('reader-content').scrollTop = 0;
 }
 
@@ -631,160 +556,93 @@ async function changePage(delta) {
   await renderPage(n);
 }
 
-function closeReader() {
-  pdfDoc = null;
-  showScreen(prevScreen || 'library');
-}
+function closeReader() { pdfDoc = null; showScreen(prevScreen || 'library'); }
 
-// Swipe left/right to change page
 let swipeX = 0;
-document.getElementById('screen-reader').addEventListener('touchstart', e => {
-  swipeX = e.touches[0].clientX;
-}, { passive: true });
+document.getElementById('screen-reader').addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; }, { passive: true });
 document.getElementById('screen-reader').addEventListener('touchend', e => {
   const dx = swipeX - e.changedTouches[0].clientX;
   if (Math.abs(dx) > 55) changePage(dx > 0 ? 1 : -1);
 }, { passive: true });
 
-// ─────────────────────────────────────────────
 // PLAYLISTS
-// ─────────────────────────────────────────────
-function getPlaylists() {
-  try { return JSON.parse(localStorage.getItem('cifras_pls') || '{}'); }
-  catch { return {}; }
-}
-function savePlaylists(pls) {
-  localStorage.setItem('cifras_pls', JSON.stringify(pls));
-}
+function getPlaylists() { try { return JSON.parse(localStorage.getItem('cifras_pls') || '{}'); } catch { return {}; } }
+function savePlaylists(pls) { localStorage.setItem('cifras_pls', JSON.stringify(pls)); }
 
 function renderPlaylists() {
-  const pls  = getPlaylists();
-  const keys = Object.keys(pls);
+  const pls = getPlaylists(), keys = Object.keys(pls);
   const wrap = document.getElementById('pl-list');
   wrap.innerHTML = '';
-
   if (!keys.length) {
-    wrap.innerHTML = `<div class="empty"><div class="ei">📋</div>
-      <p>Nenhuma playlist ainda.<br>Crie uma pela Biblioteca!</p></div>`;
+    wrap.innerHTML = `<div class="empty"><div class="ei">📋</div><p>Nenhuma playlist ainda.<br>Crie uma pela Biblioteca!</p></div>`;
   } else {
     keys.forEach(name => {
-      const ids   = pls[name];
-      const card  = document.createElement('div');
-      card.className = 'pl-card';
-
-      const header = document.createElement('div');
-      header.className = 'pl-header';
-      header.innerHTML = `
-        <span class="pl-header-icon">🎵</span>
-        <span class="pl-name">${esc(name)}</span>
-        <span class="pl-count">${ids.length} cifra${ids.length !== 1 ? 's' : ''}</span>
-        <button class="pl-del" title="Excluir playlist">🗑</button>
-      `;
-      header.querySelector('.pl-del').addEventListener('click', e => {
-        e.stopPropagation();
-        deletePlaylist(name);
-      });
-
-      const filesDiv = document.createElement('div');
-      filesDiv.className = 'pl-files';
-
-      ids.forEach((fid, i) => {
-        const f    = allFiles.find(x => x.id === fid);
+      const ids = pls[name];
+      const card = document.createElement('div'); card.className = 'pl-card';
+      const header = document.createElement('div'); header.className = 'pl-header';
+      header.innerHTML = `<span class="pl-header-icon">🎵</span><span class="pl-name">${esc(name)}</span><span class="pl-count">${ids.length} cifra${ids.length !== 1 ? 's' : ''}</span><button class="pl-del">🗑</button>`;
+      header.querySelector('.pl-del').addEventListener('click', e => { e.stopPropagation(); deletePlaylist(name); });
+      const filesDiv = document.createElement('div'); filesDiv.className = 'pl-files';
+      ids.forEach(fid => {
+        const f = allFiles.find(x => x.id === fid);
         const label = f ? f.name.replace(/\.pdf$/i, '') : '(não encontrado)';
-        const row  = document.createElement('div');
-        row.className = 'pl-file-row';
-        row.innerHTML = `
-          <span>🎼</span>
-          <span class="pl-file-name">${esc(label)}</span>
-          <button class="pl-file-del" title="Remover da playlist">✕</button>
-          <span style="color:var(--text-muted)">›</span>
-        `;
+        const row = document.createElement('div'); row.className = 'pl-file-row';
+        row.innerHTML = `<span>🎼</span><span class="pl-file-name">${esc(label)}</span><button class="pl-file-del">✕</button><span style="color:var(--text-muted)">›</span>`;
         row.addEventListener('click', () => { if (f) openReader(f.id, f.name); });
-        row.querySelector('.pl-file-del').addEventListener('click', e => {
-          e.stopPropagation();
-          removeFromPlaylist(name, fid);
-        });
+        row.querySelector('.pl-file-del').addEventListener('click', e => { e.stopPropagation(); removeFromPlaylist(name, fid); });
         filesDiv.appendChild(row);
       });
-
       header.addEventListener('click', () => filesDiv.classList.toggle('open'));
-      card.appendChild(header);
-      card.appendChild(filesDiv);
-      wrap.appendChild(card);
+      card.appendChild(header); card.appendChild(filesDiv); wrap.appendChild(card);
     });
   }
-
   const addBtn = document.createElement('button');
-  addBtn.className = 'btn-new-pl';
-  addBtn.textContent = '+ Nova Playlist';
-  addBtn.addEventListener('click', () => {
-    addAfterCreate = false;
-    showNewPl();
-  });
+  addBtn.className = 'btn-new-pl'; addBtn.textContent = '+ Nova Playlist';
+  addBtn.addEventListener('click', () => { addAfterCreate = false; showNewPl(); });
   wrap.appendChild(addBtn);
 }
 
 function deletePlaylist(name) {
   if (!confirm(`Excluir a playlist "${name}"?`)) return;
-  const pls = getPlaylists();
-  delete pls[name];
-  savePlaylists(pls);
-  renderPlaylists();
+  const pls = getPlaylists(); delete pls[name]; savePlaylists(pls); renderPlaylists();
 }
 
 function removeFromPlaylist(plName, fid) {
   const pls = getPlaylists();
   if (!pls[plName]) return;
-  pls[plName] = pls[plName].filter(id => id !== fid);
-  savePlaylists(pls);
-  renderPlaylists();
+  pls[plName] = pls[plName].filter(id => id !== fid); savePlaylists(pls); renderPlaylists();
 }
 
-// ─────────────────────────────────────────────
 // ADD TO PLAYLIST
-// ─────────────────────────────────────────────
 function openAddModal() { openAddForFile(currentId, currentName); }
 
 function openAddForFile(id, name) {
-  pendingId   = id;
-  pendingName = name;
-  const pls  = getPlaylists();
-  const keys = Object.keys(pls);
+  pendingId = id; pendingName = name;
+  const pls = getPlaylists(), keys = Object.keys(pls);
   const body = document.getElementById('modal-add-body');
-
-  if (!keys.length) {
-    body.innerHTML = `<p style="color:var(--text-muted);margin-bottom:8px">Nenhuma playlist criada ainda.</p>`;
-  } else {
+  if (!keys.length) { body.innerHTML = `<p style="color:var(--text-muted);margin-bottom:8px">Nenhuma playlist criada ainda.</p>`; }
+  else {
     body.innerHTML = '';
     keys.forEach(name => {
       const already = pls[name].includes(id);
-      const row     = document.createElement('div');
+      const row = document.createElement('div');
       row.className = 'pl-option' + (already ? ' done' : '');
       row.innerHTML = `<span class="pl-option-name">${esc(name)}</span><span>${already ? '✓' : '+'}</span>`;
       if (!already) row.addEventListener('click', () => addToPlaylist(name));
       body.appendChild(row);
     });
   }
-
   openModal('modal-add');
 }
 
 function addToPlaylist(name) {
   const pls = getPlaylists();
   if (!pls[name]) pls[name] = [];
-  if (!pls[name].includes(pendingId)) {
-    pls[name].push(pendingId);
-    savePlaylists(pls);
-  }
-  closeModal('modal-add');
-  toast(`Adicionado a "${name}" ✓`);
+  if (!pls[name].includes(pendingId)) { pls[name].push(pendingId); savePlaylists(pls); }
+  closeModal('modal-add'); toast(`Adicionado a "${name}" ✓`);
 }
 
-function switchToNewPl() {
-  addAfterCreate = true;
-  closeModal('modal-add');
-  showNewPl();
-}
+function switchToNewPl() { addAfterCreate = true; closeModal('modal-add'); showNewPl(); }
 
 function showNewPl() {
   document.getElementById('new-pl-name').value = '';
@@ -797,28 +655,19 @@ function createPlaylist() {
   if (!name) { toast('Digite um nome para a playlist.'); return; }
   const pls = getPlaylists();
   if (!pls[name]) pls[name] = [];
-  if (addAfterCreate && pendingId && !pls[name].includes(pendingId)) {
-    pls[name].push(pendingId);
-  }
-  savePlaylists(pls);
-  closeModal('modal-new-pl');
+  if (addAfterCreate && pendingId && !pls[name].includes(pendingId)) pls[name].push(pendingId);
+  savePlaylists(pls); closeModal('modal-new-pl');
   if (addAfterCreate) toast(`Adicionado a "${name}" ✓`);
   if (currentVisibleScreen() === 'playlists') renderPlaylists();
 }
 
-// ─────────────────────────────────────────────
-// SCREEN NAVIGATION
-// ─────────────────────────────────────────────
+// NAVIGATION
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   document.getElementById('screen-' + name)?.classList.remove('hidden');
-
-  const showNav = ['library', 'playlists'].includes(name) && accessToken;
-  document.getElementById('bottom-nav').classList.toggle('hidden', !showNav);
-
+  document.getElementById('bottom-nav').classList.toggle('hidden', !['library','playlists'].includes(name) || !accessToken);
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('nav-' + name)?.classList.add('active');
-
   if (name === 'playlists') renderPlaylists();
   if (name === 'config') document.getElementById('client-id-input').value = clientId;
 }
@@ -831,25 +680,18 @@ function currentVisibleScreen() {
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-// Close sheet by tapping overlay
 document.querySelectorAll('.overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) el.classList.add('hidden'); });
 });
 
-// ─────────────────────────────────────────────
-// UTILS
-// ─────────────────────────────────────────────
 function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 let toastTimer;
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
 }
