@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Cifras</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cifras">
+  <meta name="theme-color" content="#FF6B35">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #FF6B35;
+      --primary-dark:  #E05520;
+      --bg:            #F4F4EF;
+      --surface:       #FFFFFF;
+      --text:          #1A1A1A;
+      --text-muted:    #6B7280;
+      --border:        #E5E5E0;
+      --nav-h:         72px;
+      --header-h:      60px;
+      --safe-bottom:   env(safe-area-inset-bottom, 0px);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* ── SCREENS ── */
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .hidden { display: none !important; }
+
+    /* ── AUTH ── */
+    #screen-auth {
+      background: linear-gradient(150deg, #0f0f1a 0%, #1a1a3e 60%, #0f3060 100%);
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+    .auth-icon  { font-size: 80px; }
+    .auth-title { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+    .auth-sub   { font-size: 15px; color: rgba(255,255,255,.55); }
+    .btn-google {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; color: #111; border: none;
+      border-radius: 14px; padding: 15px 28px;
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 2px 16px rgba(0,0,0,.3);
+      margin-top: 8px;
+    }
+    .btn-google:active { opacity: .85; }
+    .link-btn {
+      background: none; border: none;
+      color: rgba(255,255,255,.4); font-size: 13px; cursor: pointer;
+      margin-top: -12px;
+    }
+
+    /* ── CONFIG ── */
+    #screen-config {
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .config-card {
+      background: var(--surface); border-radius: 20px;
+      padding: 28px; width: 100%; max-width: 420px;
+    }
+    .config-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .config-card p  { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+    .config-card a  { color: var(--primary); }
+    .field-label { font-size: 12px; font-weight: 700; color: var(--text-muted);
+                   text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+
+    /* ── HEADER ── */
+    .header {
+      height: var(--header-h); background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 16px; gap: 8px;
+      flex-shrink: 0;
+    }
+    .header-title { font-size: 20px; font-weight: 700; flex: 1; }
+    .icon-btn {
+      background: none; border: none; padding: 8px; border-radius: 10px;
+      font-size: 20px; cursor: pointer; line-height: 1;
+    }
+    .icon-btn:active { background: var(--bg); }
+
+    /* ── BOTTOM NAV ── */
+    #bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: calc(var(--nav-h) + var(--safe-bottom));
+      background: var(--surface); border-top: 1px solid var(--border);
+      display: flex; z-index: 100;
+      padding-bottom: var(--safe-bottom);
+    }
+    .nav-btn {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 3px;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: 11px; font-weight: 600;
+      transition: color .15s;
+    }
+    .nav-btn .ni { font-size: 26px; }
+    .nav-btn.active { color: var(--primary); }
+
+    /* ── LIBRARY ── */
+    #screen-library { padding-bottom: var(--nav-h); }
+    .search-wrap {
+      padding: 10px 14px 0;
+      display: flex; gap: 8px; align-items: center;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .search-input {
+      flex: 1; border: 1px solid var(--border); border-radius: 10px;
+      padding: 9px 14px; font-size: 15px; background: var(--bg);
+      outline: none; color: var(--text);
+    }
+    .search-input:focus { border-color: var(--primary); }
+    .scroll-area { flex: 1; overflow-y: auto; padding: 14px; }
+
+    .files-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .file-card {
+      background: var(--surface); border-radius: 16px;
+      border: 1.5px solid var(--border);
+      padding: 16px 12px 12px;
+      cursor: pointer; position: relative;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      text-align: center; transition: transform .12s, box-shadow .12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .file-card:active { transform: scale(.96); box-shadow: none; }
+    .file-card .fi { font-size: 36px; }
+    .file-card .fn {
+      font-size: 12px; font-weight: 500; line-height: 1.35; color: var(--text);
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .card-add {
+      position: absolute; top: 6px; right: 8px;
+      background: none; border: none; font-size: 22px; cursor: pointer;
+      color: var(--text-muted); line-height: 1;
+    }
+
+    /* ── PLAYLISTS ── */
+    #screen-playlists { padding-bottom: var(--nav-h); }
+    .pl-list { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .pl-card { background: var(--surface); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; }
+    .pl-header {
+      display: flex; align-items: center; padding: 14px 16px; gap: 10px; cursor: pointer;
+    }
+    .pl-header-icon { font-size: 26px; }
+    .pl-name { flex: 1; font-weight: 600; font-size: 16px; }
+    .pl-count { font-size: 13px; color: var(--text-muted); }
+    .pl-del { background: none; border: none; font-size: 18px; cursor: pointer; opacity: .45; padding: 4px 6px; }
+    .pl-files { border-top: 1px solid var(--border); display: none; }
+    .pl-files.open { display: block; }
+    .pl-file-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .pl-file-row:last-child { border-bottom: none; }
+    .pl-file-row:active { background: var(--bg); }
+    .pl-file-name { flex: 1; font-size: 14px; }
+    .pl-file-del { background: none; border: none; font-size: 16px; cursor: pointer; opacity: .4; padding: 4px; }
+    .btn-new-pl {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--primary); color: white; border: none;
+      border-radius: 14px; padding: 15px; font-size: 16px; font-weight: 600;
+      cursor: pointer; width: 100%;
+    }
+    .btn-new-pl:active { background: var(--primary-dark); }
+
+    /* ── READER ── */
+    #screen-reader { background: #1a1a1a; }
+    .reader-header {
+      height: var(--header-h); background: rgba(0,0,0,.75);
+      display: flex; align-items: center; padding: 0 12px; gap: 8px;
+      flex-shrink: 0;
+    }
+    .reader-title {
+      flex: 1; color: #fff; font-size: 15px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .reader-add-btn {
+      background: rgba(255,255,255,.12); border: none; border-radius: 10px;
+      color: #fff; font-size: 13px; font-weight: 600; padding: 7px 12px; cursor: pointer;
+    }
+    .reader-content { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; }
+    #pdf-canvas { display: block; max-width: 100%; }
+    .reader-footer {
+      height: 56px; background: rgba(0,0,0,.75);
+      display: flex; align-items: center; justify-content: center;
+      gap: 20px; flex-shrink: 0;
+    }
+    .page-btn {
+      background: none; border: none; color: #fff; font-size: 32px; cursor: pointer;
+      padding: 6px 18px; opacity: .85; line-height: 1;
+    }
+    .page-btn:disabled { opacity: .25; }
+    .page-info { color: rgba(255,255,255,.65); font-size: 14px; min-width: 72px; text-align: center; }
+
+    /* ── INPUTS & BUTTONS ── */
+    .text-input {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 13px 14px; font-size: 16px; background: var(--bg);
+      color: var(--text); outline: none; margin-bottom: 12px;
+    }
+    .text-input:focus { border-color: var(--primary); }
+    .btn-primary {
+      background: var(--primary); color: #fff; border: none;
+      border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 600;
+      cursor: pointer; width: 100%;
+    }
+    .btn-primary:active { background: var(--primary-dark); }
+    .btn-secondary {
+      background: var(--bg); color: var(--text); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 13px; font-size: 16px; font-weight: 500;
+      cursor: pointer; width: 100%; margin-top: 8px;
+    }
+    .btn-secondary:active { background: var(--border); }
+
+    /* ── MODALS ── */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      display: flex; align-items: flex-end; z-index: 200;
+    }
+    .sheet {
+      background: var(--surface); border-radius: 24px 24px 0 0;
+      padding: 24px; width: 100%; max-height: 75vh; overflow-y: auto;
+      padding-bottom: calc(24px + var(--safe-bottom));
+    }
+    .sheet-title { font-size: 20px; font-weight: 700; margin-bottom: 18px; }
+    .pl-option {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+    }
+    .pl-option:last-of-type { border-bottom: none; }
+    .pl-option:active { opacity: .7; }
+    .pl-option-name { font-size: 16px; }
+    .pl-option.done { opacity: .4; pointer-events: none; }
+
+    /* ── STATES ── */
+    .loading, .empty {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 48px 24px; text-align: center; color: var(--text-muted);
+    }
+    .empty .ei { font-size: 52px; }
+    .spinner {
+      width: 30px; height: 30px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: #222; color: #fff; padding: 10px 20px; border-radius: 20px;
+      font-size: 14px; z-index: 999; opacity: 0; transition: opacity .2s;
+      white-space: nowrap; pointer-events: none;
+    }
+    #toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ AUTH SCREEN ════════════════════ -->
+<div id="screen-auth" class="screen">
+  <div class="auth-icon">🎸</div>
+  <div style="text-align:center">
+    <div class="auth-title">Cifras</div>
+    <div class="auth-sub">Suas cifras do Drive, sempre à mão</div>
+  </div>
+  <button class="btn-google" onclick="startSignIn()">
+    <svg width="20" height="20" viewBox="0 0 48 48">
+      <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.1 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/>
+      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5.1l-6.2-5.2C29.3 35.3 26.8 36 24 36c-5.3 0-9.6-2.9-11.3-7l-6.5 5C9.7 39.7 16.3 44 24 44z"/>
+      <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.5-2.6 4.6-4.8 6l6.2 5.2C40.9 35.7 44 30.3 44 24c0-1.3-.1-2.7-.4-4z"/>
+    </svg>
+    Entrar com Google
+  </button>
+  <button class="link-btn" onclick="showScreen('config')">⚙ Configurar Client ID</button>
+</div>
+
+<!-- ════════════════════ CONFIG SCREEN ════════════════════ -->
+<div id="screen-config" class="screen hidden">
+  <div class="config-card">
+    <h2>🔑 Configuração</h2>
+    <p>
+      Para acessar seus PDFs do Drive você precisa de um <strong>Client ID</strong> do Google Cloud.<br><br>
+      <a href="https://console.cloud.google.com/" target="_blank">Acesse o Google Cloud Console</a>,
+      crie um projeto, ative a <strong>Google Drive API</strong>, crie uma credencial OAuth
+      do tipo "Aplicativo da Web" e adicione a URL deste app como origem autorizada.
+      É gratuito.
+    </p>
+    <div class="field-label">Client ID</div>
+    <input id="client-id-input" type="text" class="text-input"
+      placeholder="xxxxx.apps.googleusercontent.com"
+      autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+    <button class="btn-primary" onclick="saveConfig()">Salvar e continuar</button>
+    <button class="btn-secondary" onclick="showScreen('auth')">Voltar</button>
+  </div>
+</div>
+
+<!-- ════════════════════ LIBRARY SCREEN ════════════════════ -->
+<div id="screen-library" class="screen hidden">
+  <div class="header">
+    <div class="header-title">🎸 Biblioteca</div>
+    <button class="icon-btn" onclick="loadFiles()" title="Atualizar">↻</button>
+    <button class="icon-btn" onclick="signOut()" title="Sair">👤</button>
+  </div>
+  <div class="search-wrap">
+    <input id="search-input" type="text" class="search-input"
+      placeholder="🔍  Buscar cifras..." oninput="filterFiles()">
+  </div>
+  <div class="scroll-area" id="library-content">
+    <div class="loading"><div class="spinner"></div><span>Carregando cifras…</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════ PLAYLISTS SCREEN ════════════════════ -->
+<div id="screen-playlists" class="screen hidden">
+  <div class="header">
+    <div class="header-title">📋 Playlists</div>
+  </div>
+  <div class="pl-list" id="pl-list"></div>
+</div>
+
+<!-- ════════════════════ READER SCREEN ════════════════════ -->
+<div id="screen-reader" class="screen hidden">
+  <div class="reader-header">
+    <button class="icon-btn" style="color:#fff" onclick="closeReader()">←</button>
+    <div class="reader-title" id="reader-title"></div>
+    <button class="reader-add-btn" onclick="openAddModal()">＋ Playlist</button>
+  </div>
+  <div class="reader-content" id="reader-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <span style="color:rgba(255,255,255,.6)">Carregando PDF…</span>
+    </div>
+  </div>
+  <div class="reader-footer">
+    <button class="page-btn" id="btn-prev" onclick="changePage(-1)">‹</button>
+    <div class="page-info" id="page-info">—</div>
+    <button class="page-btn" id="btn-next" onclick="changePage(1)">›</button>
+  </div>
+</div>
+
+<!-- ════════════════════ BOTTOM NAV ════════════════════ -->
+<nav id="bottom-nav" class="hidden">
+  <button class="nav-btn active" id="nav-library" onclick="showScreen('library')">
+    <span class="ni">📚</span>Biblioteca
+  </button>
+  <button class="nav-btn" id="nav-playlists" onclick="showScreen('playlists')">
+    <span class="ni">📋</span>Playlists
+  </button>
+</nav>
+
+<!-- ════════════════════ MODAL: Add to Playlist ════════════════════ -->
+<div id="modal-add" class="overlay hidden">
+  <div class="sheet">
+    <div class="sheet-title">Adicionar à Playlist</div>
+    <div id="modal-add-body"></div>
+    <button class="btn-primary" style="margin-top:16px" onclick="switchToNewPl()">+ Nova playlist</button>
+    <button class="btn-secondary" onclick="closeModal('modal-add')">Cancelar</button>
+  </div>
+</div>
+
+<!-- ════════════════════ MODAL: New Playlist ════════════════════ -->
+<div id="modal-new-pl" class="overlay hidden">
+  <div class="sheet">
+    <div class="sheet-title">Nova Playlist</div>
+    <input id="new-pl-name" type="text" class="text-input"
+      placeholder="Nome da playlist…" autocorrect="off" autocapitalize="sentences">
+    <button class="btn-primary" onclick="createPlaylist()">Criar</button>
+    <button class="btn-secondary" onclick="closeModal('modal-new-pl')">Cancelar</button>
+  </div>
+</div>
+
+<!-- ════════════════════ TOAST ════════════════════ -->
+<div id="toast"></div>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async></script>
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script>
+'use strict';
+
+// ─────────────────────────────────────────────
+// CONSTANTS & STATE
+// ─────────────────────────────────────────────
+const SCOPES   = 'https://www.googleapis.com/auth/drive.readonly';
+const DRIVE    = 'https://www.googleapis.com/drive/v3';
+
+let clientId     = localStorage.getItem('cifras_cid') || '';
+let accessToken  = null;
+let tokenClient  = null;
+let allFiles     = [];       // [{id, name}]
+let pdfDoc       = null;
+let currentPage  = 1;
+let currentId    = null;
+let currentName  = '';
+let prevScreen   = 'library';
+// For "add to playlist" flow
+let pendingId    = null;
+let pendingName  = '';
+// Whether new-playlist modal should also add the pending file
+let addAfterCreate = false;
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(console.error);
+}
+
+window.addEventListener('load', () => {
+  const tok = sessionStorage.getItem('cifras_tok');
+  const exp = sessionStorage.getItem('cifras_exp');
+  if (tok && exp && Date.now() < +exp) {
+    accessToken = tok;
+    enterApp();
+  } else {
+    showScreen('auth');
+  }
+});
+
+// ─────────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────────
+function startSignIn() {
+  if (!clientId) { showScreen('config'); return; }
+  if (typeof google === 'undefined') {
+    toast('Script do Google ainda carregando, tente novamente.');
+    return;
+  }
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: SCOPES,
+    callback(resp) {
+      if (resp.error) { console.error(resp); toast('Erro: ' + resp.error); return; }
+      accessToken = resp.access_token;
+      sessionStorage.setItem('cifras_tok', accessToken);
+      sessionStorage.setItem('cifras_exp', Date.now() + resp.expires_in * 1000);
+      enterApp();
+    },
+  });
+  tokenClient.requestAccessToken();
+}
+
+function signOut() {
+  if (accessToken && typeof google !== 'undefined')
+    google.accounts.oauth2.revoke(accessToken);
+  accessToken = null;
+  sessionStorage.clear();
+  allFiles = [];
+  document.getElementById('bottom-nav').classList.add('hidden');
+  showScreen('auth');
+}
+
+function saveConfig() {
+  const v = document.getElementById('client-id-input').value.trim();
+  if (!v) { toast('Cole o Client ID antes de salvar.'); return; }
+  clientId = v;
+  localStorage.setItem('cifras_cid', v);
+  showScreen('auth');
+}
+
+// ─────────────────────────────────────────────
+// APP ENTRY
+// ─────────────────────────────────────────────
+function enterApp() {
+  document.getElementById('bottom-nav').classList.remove('hidden');
+  showScreen('library');
+  loadFiles();
+}
+
+// ─────────────────────────────────────────────
+// DRIVE API
+// ─────────────────────────────────────────────
+async function api(url) {
+  const r = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!r.ok) throw new Error(`Drive ${r.status}`);
+  return r.json();
+}
+
+async function loadFiles() {
+  setLibraryContent(`<div class="loading"><div class="spinner"></div><span>Carregando cifras…</span></div>`);
+  try {
+    let files = [], pageToken = '';
+    do {
+      const q  = encodeURIComponent("mimeType='application/pdf' and trashed=false");
+      let  url = `${DRIVE}/files?q=${q}&fields=nextPageToken,files(id,name)&orderBy=name&pageSize=200`;
+      if (pageToken) url += `&pageToken=${pageToken}`;
+      const d  = await api(url);
+      files      = files.concat(d.files || []);
+      pageToken  = d.nextPageToken || '';
+    } while (pageToken);
+
+    allFiles = files;
+    document.getElementById('search-input').value = '';
+    renderLibrary(files);
+  } catch (e) {
+    setLibraryContent(`<div class="empty"><div class="ei">⚠️</div><p>Não foi possível carregar.<br>Tente sair e entrar novamente.</p></div>`);
+    console.error(e);
+  }
+}
+
+// ─────────────────────────────────────────────
+// LIBRARY
+// ─────────────────────────────────────────────
+function renderLibrary(files) {
+  if (!files.length) {
+    setLibraryContent(`<div class="empty"><div class="ei">📄</div><p>Nenhum PDF encontrado no Drive.</p></div>`);
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.className = 'files-grid';
+  files.forEach(f => {
+    const label = f.name.replace(/\.pdf$/i, '');
+    const card  = document.createElement('div');
+    card.className = 'file-card';
+    card.innerHTML = `
+      <div class="fi">🎵</div>
+      <div class="fn">${esc(label)}</div>
+      <button class="card-add" title="Adicionar à playlist">＋</button>
+    `;
+    card.addEventListener('click', () => openReader(f.id, f.name));
+    card.querySelector('.card-add').addEventListener('click', e => {
+      e.stopPropagation();
+      openAddForFile(f.id, f.name);
+    });
+    grid.appendChild(card);
+  });
+  const wrap = document.getElementById('library-content');
+  wrap.innerHTML = '';
+  wrap.appendChild(grid);
+}
+
+function filterFiles() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  renderLibrary(q ? allFiles.filter(f => f.name.toLowerCase().includes(q)) : allFiles);
+}
+
+function setLibraryContent(html) {
+  document.getElementById('library-content').innerHTML = html;
+}
+
+// ─────────────────────────────────────────────
+// PDF READER
+// ─────────────────────────────────────────────
+async function openReader(id, name) {
+  currentId   = id;
+  currentName = name;
+  prevScreen  = currentVisibleScreen();
+
+  const label = name.replace(/\.pdf$/i, '');
+  document.getElementById('reader-title').textContent = label;
+  document.getElementById('reader-content').innerHTML =
+    `<div class="loading"><div class="spinner"></div><span style="color:rgba(255,255,255,.6)">Carregando PDF…</span></div>`;
+  showScreen('reader');
+
+  try {
+    const res = await fetch(`${DRIVE}/files/${id}?alt=media`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if (!res.ok) throw new Error(res.status);
+    const buf = await res.arrayBuffer();
+
+    pdfDoc = await pdfjsLib.getDocument({ data: buf }).promise;
+    currentPage = 1;
+    document.getElementById('reader-content').innerHTML = `<canvas id="pdf-canvas"></canvas>`;
+    await renderPage(1);
+  } catch (e) {
+    document.getElementById('reader-content').innerHTML =
+      `<div class="empty"><div class="ei">⚠️</div><p style="color:#fff">Erro ao carregar o PDF.</p></div>`;
+    console.error(e);
+  }
+}
+
+async function renderPage(num) {
+  if (!pdfDoc) return;
+  const page      = await pdfDoc.getPage(num);
+  const canvas    = document.getElementById('pdf-canvas');
+  if (!canvas) return;
+  const ctx       = canvas.getContext('2d');
+  const dpr       = window.devicePixelRatio || 1;
+  const base      = page.getViewport({ scale: 1 });
+  const scale     = (window.innerWidth / base.width) * dpr;
+  const vp        = page.getViewport({ scale });
+
+  canvas.width        = vp.width;
+  canvas.height       = vp.height;
+  canvas.style.width  = window.innerWidth + 'px';
+  canvas.style.height = (vp.height / dpr) + 'px';
+
+  await page.render({ canvasContext: ctx, viewport: vp }).promise;
+
+  currentPage = num;
+  document.getElementById('page-info').textContent  = `${num} / ${pdfDoc.numPages}`;
+  document.getElementById('btn-prev').disabled       = num <= 1;
+  document.getElementById('btn-next').disabled       = num >= pdfDoc.numPages;
+  document.getElementById('reader-content').scrollTop = 0;
+}
+
+async function changePage(delta) {
+  const n = currentPage + delta;
+  if (n < 1 || n > pdfDoc.numPages) return;
+  await renderPage(n);
+}
+
+function closeReader() {
+  pdfDoc = null;
+  showScreen(prevScreen || 'library');
+}
+
+// Swipe left/right to change page
+let swipeX = 0;
+document.getElementById('screen-reader').addEventListener('touchstart', e => {
+  swipeX = e.touches[0].clientX;
+}, { passive: true });
+document.getElementById('screen-reader').addEventListener('touchend', e => {
+  const dx = swipeX - e.changedTouches[0].clientX;
+  if (Math.abs(dx) > 55) changePage(dx > 0 ? 1 : -1);
+}, { passive: true });
+
+// ─────────────────────────────────────────────
+// PLAYLISTS
+// ─────────────────────────────────────────────
+function getPlaylists() {
+  try { return JSON.parse(localStorage.getItem('cifras_pls') || '{}'); }
+  catch { return {}; }
+}
+function savePlaylists(pls) {
+  localStorage.setItem('cifras_pls', JSON.stringify(pls));
+}
+
+function renderPlaylists() {
+  const pls  = getPlaylists();
+  const keys = Object.keys(pls);
+  const wrap = document.getElementById('pl-list');
+  wrap.innerHTML = '';
+
+  if (!keys.length) {
+    wrap.innerHTML = `<div class="empty"><div class="ei">📋</div>
+      <p>Nenhuma playlist ainda.<br>Crie uma pela Biblioteca!</p></div>`;
+  } else {
+    keys.forEach(name => {
+      const ids   = pls[name];
+      const card  = document.createElement('div');
+      card.className = 'pl-card';
+
+      const header = document.createElement('div');
+      header.className = 'pl-header';
+      header.innerHTML = `
+        <span class="pl-header-icon">🎵</span>
+        <span class="pl-name">${esc(name)}</span>
+        <span class="pl-count">${ids.length} cifra${ids.length !== 1 ? 's' : ''}</span>
+        <button class="pl-del" title="Excluir playlist">🗑</button>
+      `;
+      header.querySelector('.pl-del').addEventListener('click', e => {
+        e.stopPropagation();
+        deletePlaylist(name);
+      });
+
+      const filesDiv = document.createElement('div');
+      filesDiv.className = 'pl-files';
+
+      ids.forEach((fid, i) => {
+        const f    = allFiles.find(x => x.id === fid);
+        const label = f ? f.name.replace(/\.pdf$/i, '') : '(não encontrado)';
+        const row  = document.createElement('div');
+        row.className = 'pl-file-row';
+        row.innerHTML = `
+          <span>🎼</span>
+          <span class="pl-file-name">${esc(label)}</span>
+          <button class="pl-file-del" title="Remover da playlist">✕</button>
+          <span style="color:var(--text-muted)">›</span>
+        `;
+        row.addEventListener('click', () => { if (f) openReader(f.id, f.name); });
+        row.querySelector('.pl-file-del').addEventListener('click', e => {
+          e.stopPropagation();
+          removeFromPlaylist(name, fid);
+        });
+        filesDiv.appendChild(row);
+      });
+
+      header.addEventListener('click', () => filesDiv.classList.toggle('open'));
+      card.appendChild(header);
+      card.appendChild(filesDiv);
+      wrap.appendChild(card);
+    });
+  }
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn-new-pl';
+  addBtn.textContent = '+ Nova Playlist';
+  addBtn.addEventListener('click', () => {
+    addAfterCreate = false;
+    showNewPl();
+  });
+  wrap.appendChild(addBtn);
+}
+
+function deletePlaylist(name) {
+  if (!confirm(`Excluir a playlist "${name}"?`)) return;
+  const pls = getPlaylists();
+  delete pls[name];
+  savePlaylists(pls);
+  renderPlaylists();
+}
+
+function removeFromPlaylist(plName, fid) {
+  const pls = getPlaylists();
+  if (!pls[plName]) return;
+  pls[plName] = pls[plName].filter(id => id !== fid);
+  savePlaylists(pls);
+  renderPlaylists();
+}
+
+// ─────────────────────────────────────────────
+// ADD TO PLAYLIST
+// ─────────────────────────────────────────────
+function openAddModal() { openAddForFile(currentId, currentName); }
+
+function openAddForFile(id, name) {
+  pendingId   = id;
+  pendingName = name;
+  const pls  = getPlaylists();
+  const keys = Object.keys(pls);
+  const body = document.getElementById('modal-add-body');
+
+  if (!keys.length) {
+    body.innerHTML = `<p style="color:var(--text-muted);margin-bottom:8px">Nenhuma playlist criada ainda.</p>`;
+  } else {
+    body.innerHTML = '';
+    keys.forEach(name => {
+      const already = pls[name].includes(id);
+      const row     = document.createElement('div');
+      row.className = 'pl-option' + (already ? ' done' : '');
+      row.innerHTML = `<span class="pl-option-name">${esc(name)}</span><span>${already ? '✓' : '+'}</span>`;
+      if (!already) row.addEventListener('click', () => addToPlaylist(name));
+      body.appendChild(row);
+    });
+  }
+
+  openModal('modal-add');
+}
+
+function addToPlaylist(name) {
+  const pls = getPlaylists();
+  if (!pls[name]) pls[name] = [];
+  if (!pls[name].includes(pendingId)) {
+    pls[name].push(pendingId);
+    savePlaylists(pls);
+  }
+  closeModal('modal-add');
+  toast(`Adicionado a "${name}" ✓`);
+}
+
+function switchToNewPl() {
+  addAfterCreate = true;
+  closeModal('modal-add');
+  showNewPl();
+}
+
+function showNewPl() {
+  document.getElementById('new-pl-name').value = '';
+  openModal('modal-new-pl');
+  setTimeout(() => document.getElementById('new-pl-name').focus(), 100);
+}
+
+function createPlaylist() {
+  const name = document.getElementById('new-pl-name').value.trim();
+  if (!name) { toast('Digite um nome para a playlist.'); return; }
+  const pls = getPlaylists();
+  if (!pls[name]) pls[name] = [];
+  if (addAfterCreate && pendingId && !pls[name].includes(pendingId)) {
+    pls[name].push(pendingId);
+  }
+  savePlaylists(pls);
+  closeModal('modal-new-pl');
+  if (addAfterCreate) toast(`Adicionado a "${name}" ✓`);
+  if (currentVisibleScreen() === 'playlists') renderPlaylists();
+}
+
+// ─────────────────────────────────────────────
+// SCREEN NAVIGATION
+// ─────────────────────────────────────────────
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById('screen-' + name)?.classList.remove('hidden');
+
+  const showNav = ['library', 'playlists'].includes(name) && accessToken;
+  document.getElementById('bottom-nav').classList.toggle('hidden', !showNav);
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-' + name)?.classList.add('active');
+
+  if (name === 'playlists') renderPlaylists();
+  if (name === 'config') document.getElementById('client-id-input').value = clientId;
+}
+
+function currentVisibleScreen() {
+  const s = document.querySelector('.screen:not(.hidden)');
+  return s ? s.id.replace('screen-', '') : '';
+}
+
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+// Close sheet by tapping overlay
+document.querySelectorAll('.overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.add('hidden'); });
+});
+
+// ─────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
