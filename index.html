@@ -358,6 +358,7 @@
 <div id="screen-playlists" class="screen hidden">
   <div class="header">
     <div class="header-title">📋 Playlists</div>
+    <span id="sync-icon" style="font-size:18px;opacity:.4;cursor:default" title="Sincronizando…">☁️</span>
   </div>
   <div class="pl-list" id="pl-list"></div>
 </div>
@@ -442,7 +443,7 @@
 // ─────────────────────────────────────────────
 // CONSTANTS & STATE
 // ─────────────────────────────────────────────
-const SCOPES   = 'https://www.googleapis.com/auth/drive.readonly';
+const SCOPES   = 'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.appdata';
 const DRIVE    = 'https://www.googleapis.com/drive/v3';
 
 let clientId     = localStorage.getItem('cifras_cid') || '';
@@ -459,6 +460,9 @@ let pendingId    = null;
 let pendingName  = '';
 // Whether new-playlist modal should also add the pending file
 let addAfterCreate = false;
+// Drive sync
+let plSyncFileId = localStorage.getItem('cifras_plid') || null;
+let plSyncTimer  = null;
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -466,7 +470,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
-// Register Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(console.error);
 }
@@ -526,17 +529,18 @@ function saveConfig() {
 // ─────────────────────────────────────────────
 // APP ENTRY
 // ─────────────────────────────────────────────
-function enterApp() {
+async function enterApp() {
   document.getElementById('bottom-nav').classList.remove('hidden');
   showScreen('library');
   loadFiles();
+  // Carrega playlists do Drive em paralelo (sem bloquear)
+  loadPlaylistsFromDrive().catch(console.error);
 }
 
 // ─────────────────────────────────────────────
 // FOLDER STATE
 // ─────────────────────────────────────────────
 let selectedFolder = JSON.parse(localStorage.getItem('cifras_folder') || 'null');
-// { id, name }
 
 function updateFolderBanner() {
   const banner = document.getElementById('folder-banner');
@@ -570,7 +574,6 @@ async function loadFiles() {
   updateFolderBanner();
   setLibraryContent(`<div class="loading"><div class="spinner"></div><span>Carregando cifras…</span></div>`);
   try {
-    // Se há pasta selecionada, busca recursivamente
     const folderIds = selectedFolder
       ? await getAllFolderIds(selectedFolder.id)
       : null;
@@ -579,7 +582,6 @@ async function loadFiles() {
     do {
       let qStr;
       if (folderIds) {
-        // Busca PDFs em qualquer uma das pastas (pai direto)
         const parentsClause = folderIds.map(id => `'${id}' in parents`).join(' or ');
         qStr = `mimeType='application/pdf' and trashed=false and (${parentsClause})`;
       } else {
@@ -602,7 +604,6 @@ async function loadFiles() {
   }
 }
 
-// Retorna o ID da pasta raiz + todos os IDs de subpastas (recursivo)
 async function getAllFolderIds(rootId) {
   const ids   = [rootId];
   const queue = [rootId];
@@ -623,7 +624,7 @@ async function getAllFolderIds(rootId) {
 // ─────────────────────────────────────────────
 // FOLDER PICKER (navegação hierárquica)
 // ─────────────────────────────────────────────
-let folderStack      = []; // [{id, name}]
+let folderStack      = [];
 let currentFolderNav = null;
 
 async function openFolderPicker() {
@@ -849,6 +850,82 @@ function getPlaylists() {
 }
 function savePlaylists(pls) {
   localStorage.setItem('cifras_pls', JSON.stringify(pls));
+  scheduleDriveSync(pls);
+}
+
+// ─────────────────────────────────────────────
+// DRIVE PLAYLIST SYNC
+// ─────────────────────────────────────────────
+function setSyncIcon(state) {
+  const el = document.getElementById('sync-icon');
+  if (!el) return;
+  if (state === 'saving') { el.textContent = '☁️'; el.title = 'Salvando…'; el.style.opacity = '.5'; }
+  else if (state === 'ok') { el.textContent = '☁️'; el.title = 'Sincronizado'; el.style.opacity = '1'; }
+  else if (state === 'err') { el.textContent = '⚠️'; el.title = 'Erro ao sincronizar'; el.style.opacity = '1'; }
+}
+
+function scheduleDriveSync(pls) {
+  setSyncIcon('saving');
+  clearTimeout(plSyncTimer);
+  plSyncTimer = setTimeout(() => syncPlaylistsToDrive(pls), 1500);
+}
+
+async function syncPlaylistsToDrive(pls) {
+  try {
+    const json = JSON.stringify(pls);
+    if (plSyncFileId) {
+      const r = await fetch(
+        `https://www.googleapis.com/upload/drive/v3/files/${plSyncFileId}?uploadType=media`,
+        { method: 'PATCH', headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' }, body: json }
+      );
+      if (!r.ok) throw new Error(r.status);
+    } else {
+      const meta = { name: 'playlists.json', parents: ['appDataFolder'] };
+      const form = new FormData();
+      form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
+      form.append('file',     new Blob([json],                 { type: 'application/json' }));
+      const r = await fetch(
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+        { method: 'POST', headers: { Authorization: `Bearer ${accessToken}` }, body: form }
+      );
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      plSyncFileId = d.id;
+      localStorage.setItem('cifras_plid', d.id);
+    }
+    setSyncIcon('ok');
+  } catch (e) {
+    setSyncIcon('err');
+    console.error('Drive sync error:', e);
+  }
+}
+
+async function loadPlaylistsFromDrive() {
+  try {
+    if (!plSyncFileId) {
+      const d = await api(`${DRIVE}/files?spaces=appDataFolder&q=name%3D'playlists.json'&fields=files(id)&pageSize=1`);
+      if (d.files && d.files.length > 0) {
+        plSyncFileId = d.files[0].id;
+        localStorage.setItem('cifras_plid', plSyncFileId);
+      }
+    }
+    if (plSyncFileId) {
+      const r = await fetch(`${DRIVE}/files/${plSyncFileId}?alt=media`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (r.ok) {
+        const pls = await r.json();
+        localStorage.setItem('cifras_pls', JSON.stringify(pls));
+        setSyncIcon('ok');
+        if (currentVisibleScreen() === 'playlists') renderPlaylists();
+      }
+    } else {
+      setSyncIcon('ok');
+    }
+  } catch (e) {
+    setSyncIcon('err');
+    console.error('Erro ao carregar playlists do Drive:', e);
+  }
 }
 
 function renderPlaylists() {
@@ -1025,7 +1102,6 @@ function currentVisibleScreen() {
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-// Close sheet by tapping overlay
 document.querySelectorAll('.overlay').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) el.classList.add('hidden'); });
 });
